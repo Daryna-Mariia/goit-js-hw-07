@@ -32,13 +32,21 @@ function createGalleryModal(event) {
     return;
   }
 
-  window.addEventListener('keydown', event => {
+  function handleModalKeyDown(event) {
     if (event.key === 'Escape') {
+      console.log('Listen');
       modal.close();
     }
+  }
+  
+  const modal = basicLightbox.create(`<img src="${getImgURL(event)}">`, {
+    onShow: (instance) => {
+      window.addEventListener('keydown', handleModalKeyDown);
+    },
+    onClose: (instance) => {
+      window.removeEventListener('keydown', handleModalKeyDown);
+    },
   });
-
-  const modal = basicLightbox.create(`<img src="${getImgURL(event)}">`);
   modal.show();
 }
 
@@ -47,4 +55,3 @@ function getImgURL(event) {
 
   return event.target.dataset.source;
 }
-
